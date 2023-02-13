@@ -54,15 +54,16 @@ const PokemonPage: NextPage<Props> = ({pokemon}) => {
           </Card>
         </Grid>
         
-        <Grid xs={12} sm={8}>
+        <Grid xs={12} sm={8} >
           <Card>
-            <Card.Header css={{display:'flex', justifyContent:'space-between'}}>
+            <Card.Header css={{display:'flex', justifyContent:'space-between',  "@xsMax":{ flexDirection: 'column'}}}>
               <Text h1 transform='capitalize'>{pokemon.name}</Text>
 
-              <Button
+              <Button 
                 color='gradient'
                 ghost={!isInFavorites}
                 onPress={onToggleFavorite}
+                auto
                 >
                   {isInFavorites ? 'En favoritos' : 'Guardar en favoritos'}
               </Button>
