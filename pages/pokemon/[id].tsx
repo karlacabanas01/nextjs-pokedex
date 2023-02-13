@@ -111,17 +111,32 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
         params: {id}
       }))
     ,
-    fallback: false //Si pongo un id que no corresponde me da eror 404
+    fallback: 'blocking'
+    //fallback: false //Si pongo un id que no corresponde me da eror 404
   }
 };
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
   const {id} = params as {id: string};
+  const pokemon = await getPokemonInfo(id);
+
+  if(!pokemon){
+    return {
+      redirect: {
+        destination: '/', //Lo mando al home si el pokemon no existe
+        permanent: false //se pone en falso en este caso ya que pueden agregar más pokemones los creadores de la API
+      }
+    }
+  }
 
   return {
     props:{
-        pokemon: await getPokemonInfo(id)
-    }
+        pokemon
+    },
+    revalidate: 86400
+    //Incremental Static Regeneration (ISR)
+    //Los datos de tiempo estan en segundos
+    //60*60*24-> se recomienda no hacer este tipo de operaciones y poner el resultado de inmediato
   }
 };
 
