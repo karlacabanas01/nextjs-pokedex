@@ -131,7 +131,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 
   return {
     props:{
-        pokemon
+      pokemon: await getPokemonInfo(id),
     },
     revalidate: 86400
     //Incremental Static Regeneration (ISR)

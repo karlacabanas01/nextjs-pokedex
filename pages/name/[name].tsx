@@ -120,13 +120,23 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
     paths: pokemonNames.map((name) => ({
       params: { name },
     })),
-    fallback: false, //Si pongo un nombre que no corresponde me da eror 404
+    fallback: 'blocking' //Si pongo un nombre que no corresponde me da eror 404
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   // const {data}  = await  pokeApi.get<PokemonListResponse>('/pokemon?limit=151');
   const { name } = params as { name: string };
+  
+  const pokemon = await getPokemonInfo(name);
+  if(!pokemon){
+    return {
+      redirect: {
+        destination: '/', //Lo mando al home si el pokemon no existe
+        permanent: false //se pone en falso en este caso ya que pueden agregar más pokemones los creadores de la API
+      }
+    }
+  }
 
   return {
     props: {
